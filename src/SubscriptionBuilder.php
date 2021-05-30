@@ -87,7 +87,7 @@ class SubscriptionBuilder
             $paystackSubscription = $this->createSubscriptionFromTransaction($transactionId, $customer);
         } else {
             $paystackSubscription = $this->createSubscriptionFromAuthorization($authorization, $customer);
-            $this->authorization = $paystackSubscription->authorization;
+            $this->authorization = $authorization;
         }
 
         // save authorization to owner
@@ -99,7 +99,7 @@ class SubscriptionBuilder
             'name' => $this->name,
             'paystack_id' => $paystackSubscription->subscription_code,
             'paystack_status' => $paystackSubscription->status,
-            'paystack_plan' => $paystackSubscription->plan->plan_code,
+            'paystack_plan' => $paystackSubscription->plan->plan_code ?? $this->plan,
             'quantity' => $paystackSubscription->quantity,
             'email_token' => $paystackSubscription->email_token,
             'authorization' => $this->authorization,
@@ -157,7 +157,7 @@ class SubscriptionBuilder
         //verify from Paystack that the transaction was successful
         Paystack::setApiKey(config('paystacksubscription.secret', env('PAYSTACK_SECRET')));
         $transaction = Transaction::fetch($transactionId);
-        if (! $transaction->status || $transaction->data->status != 'success') {
+        if (!$transaction->status || $transaction->data->status != 'success') {
             throw PaymentFailure::incompleteTransaction($transaction);
         }
 

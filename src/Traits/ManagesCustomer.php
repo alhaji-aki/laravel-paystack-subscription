@@ -27,7 +27,7 @@ trait ManagesCustomer
      */
     public function hasPaystackId()
     {
-        return ! is_null($this->paystack_id);
+        return !is_null($this->paystack_id);
     }
 
     /**
@@ -37,7 +37,7 @@ trait ManagesCustomer
      */
     public function hasPaystackAuthorization()
     {
-        return ! is_null($this->paystack_authorization);
+        return !is_null($this->paystack_authorization);
     }
 
     /**
@@ -59,7 +59,7 @@ trait ManagesCustomer
      */
     protected function assertCustomerExists()
     {
-        if (! $this->hasPaystackId()) {
+        if (!$this->hasPaystackId()) {
             throw InvalidCustomer::doesNotExist($this);
         }
     }
@@ -78,7 +78,7 @@ trait ManagesCustomer
             throw CustomerAlreadyExist::exists($this);
         }
 
-        if (! array_key_exists('email', $options) && $email = $this->paystackEmail()) {
+        if (!array_key_exists('email', $options) && $email = $this->paystackEmail()) {
             $options['email'] = $email;
         }
 
